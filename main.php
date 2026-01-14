@@ -139,13 +139,13 @@ document.getElementById('add_new_chat').onclick = function() {
         <div style='overflow-y: hidden;'>
             <center>
                 <b>User Chat Request</b><br>
-                <input type="text" id="request_chat_with" size=18 style='border: 1px solid grey;' placeholder='case-sensitive names'><br><br>
+                <input type="text" id="request_chat_with" size=18 style='border: 1px solid grey; margin-top: 8px; border-radius: 5px;' placeholder='case-sensitive names'><br><br>
                 <button id="request_chat_with_button">Request</button>
                 <br><br><br>
                 
                 
                 <b>Group</b><br>
-                <input type="text" id="group_name_input" size=18 style='border: 1px solid grey;' placeholder='case-sensitive names'><br><br>
+                <input type="text" id="group_name_input" size=18 style='border: 1px solid grey; margin-top: 8px; border-radius: 5px;' placeholder='case-sensitive names'><br><br>
                 <button onclick='if (group_name_input.value !== "") create_group(group_name_input.value);'>Create</button>
                 <button onclick='if (group_name_input.value !== "") join_group(group_name_input.value);' style='margin-left: 30px;'>Join</button>
                 <br><br>
@@ -216,7 +216,7 @@ async function get_key_by_pbkdf2(password, salt) {
 	return new Uint8Array(derived_key_bits).toString();
 }
 
-async function pre_login() { // get the password salt for the given user (*** this is for client-side hashing for added security on top of the server side hashing)
+async function pre_login() { // get the password salt for the given user (*** this is for client-side hashing for added security on top of the server side hashing))
 
     var http_post = new XMLHttpRequest();
 
@@ -414,7 +414,7 @@ function get_all_data() {
     evtSource.addEventListener("SSE_takeover", function(event) {
             
         console.log("SSE takeover:", event.data);
-        modal_window('Auto Logout', 'Detected user has logged into another device.');
+        modal_window('Auto Timeout', 'Detected user is using this app in another device/session.');
         evtSource.close();
     });
     
@@ -686,7 +686,7 @@ function create_group(name) {
 
     server_post_request('/app/so_chat/create_group.php', 'group_name=' + encodeURIComponent(name), function(result) {
      
-        console.log('group created success');
+        modal_window('Group Creation', `<b>${group_name}</b> created successfully.`);
     });
 }
 
@@ -694,7 +694,7 @@ function join_group(name) {
 
     server_post_request('/app/so_chat/join_group.php', 'group_name=' + encodeURIComponent(name), function(result) {
      
-        console.log(result);
+        modal_window('Join Group', result);
     });
 }
 
