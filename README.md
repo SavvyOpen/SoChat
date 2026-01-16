@@ -62,4 +62,4 @@ A fully-featured **real-time chat system built from scratch in vanilla PHP and J
 ### **Demo & Code**
 
 * **Live Demo:** [https://SavvyOpen.com/chat]
-* **GitHub Repository:** [https://github.com/SavvyOpen/SoChat]
+* **GitHub Repository:** [https://github.com/SavvyOpen/SoChatX]
