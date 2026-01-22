@@ -10,7 +10,7 @@
 
 
 <head>
-    <title>SO Chat</title>
+    <title>SO ChatX</title>
     <meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
 </head>
@@ -29,30 +29,36 @@
 
 <style>
 
-body {font-family: Arial,sans-serif; font-weight: 500; overflow: hidden; margin: 0px} /* *** margin here must set to zero, default is 8px */
+body {font-family: Arial,sans-serif; font-weight: 500; background-color: #f0f0f8; overflow: hidden; margin: 0px} /* *** margin here must set to zero, default is 8px */
 
-button {box-shadow: 0px 0px 3px; border: 1px solid #e0e0e0; border-radius: 5px;}
+input {font-size: 15px; height: 24px;}
+
+button {box-shadow: 0px 0px 3px #303030; border: none; border-radius: 10px; padding: 5px 10px 5px 10px;}
 button:hover {background-color: white; cursor: pointer;}
 
-#contact_list {}
-.contact {width: 92vw; padding-left: 3vw; padding-top: 1vw; padding-bottom: 2vw; padding-right: 5vw; border: 1px solid #f0f0f0}
+
+.contact {width: 92%; max-width: 700px; padding-left: 4%; padding-top: 1%; padding-bottom: 2%; padding-right: 5%; border: 1px solid #f0f0f0}
 .contact:hover {background-color: f0f0f0}
 .user {float: left; font-size: 1.2em; color: black}
 .date_time {float: right; font-size: 1em; color: grey}
 .last_message {font-size: 1em; color: grey}
-.contact_view_button {font-size: 1em; width: 25%; float: left;}
+.contact_view_button {font-size: 1em; width: 25%; padding: 8px 0px 8px 0px; float: left;}
 
 
-#chat_title {float: left; width: 95vw; padding-top: 1vh; text-align: center; height: 1.5em; font-size: 1.2em; color: white; background-color: black}    
-#back_button {float: right; width: 5vw; padding-top: 1vh; text-align: center; height: 1.5em; font-size: 1.2em; color: white; background-color: black}    
+#chat_title {float: left; width: 93%; padding: 10px 0px 3px 0px; text-align: center; height: 30px; font-size: 1.2em; color: white; background-color: black}    
+#back_button {float: right; width: 7%; padding: 10px 0px 3px 0px; text-align: center; height: 30px; font-size: 1.2em; color: white; background-color: black}    
 #back_button:hover {cursor: pointer}
 
-#history_box {width: 99%; height: 80%; margin-left: 1%;}
+#contact_tabs {padding: 1px; position: absolute; width: 100%; max-width: 700px; color: black; background-color: #e8e8e8; overflow: auto;}
+#contact_tabs:hover {cursor: pointer;}
 
-#message_box {box-shadow: 0px 0px 1px #909090; position: fixed; bottom: 0px; font-family: Arial,sans-serif; font-size: 1em; border: none; float: left; width: 76%; height: 100px; padding: 2px; background-color: white; resize: none} 
+#history_box {position: absolute; width: 99%; max-width: 700px; height: 500px; margin-left: 1%; top: 44px; left: 0px;}
+
+#message_box {box-shadow: 0px 0px 1px #909090; font-size: 25px; position: absolute; bottom: 0px; left: 0px; font-family: Arial,sans-serif; font-size: 1em; border: none; width: 80%; max-width: 560px; height: 100px; padding: 2px; background-color: white; resize: none} 
 #message_box:focus {outline: none}
 
-#send_button {box-shadow: 0px 0px 1px #909090; position: fixed; bottom: 0px; right: 0px; float: right; text-align: center; width: 24%; height: 100px; font-size: 1.2em; color: black; background-color: #f8f8f8}
+#send_button {box-shadow: 0px 0px 1px #909090; position: absolute; bottom: 0px; right: 0px; text-align: center; width: 20%; max-width: 140px; height: 100px; font-size: 1.2em; color: black; background-color: #f8f8f8}
+#send_button:hover {cursor: pointer; background-color: white};
 
 
 .no_text_select {
@@ -70,34 +76,38 @@ button:hover {background-color: white; cursor: pointer;}
 
 <!-- HTML LAYOUTS -->
 
-<div id="contact_view" class="no_text_select">
+<div id="master_view" style='box-shadow: 0px 1px 1px grey; background-color: white; width: 100%; height: 100%; max-width: 700px; margin-left: auto; margin-right: auto;'>
 
-    <div id="logo" style="text-align: center; padding-top: 1vh; width: 100%; height: 1.8em; background-color: black; color: white; font-size: 1.2em;">SO Chat
+    <div id="contact_view" style="position: absolute; width: 100%; max-width: 700px; height: 100%; top: 0px;" class="no_text_select">
+    
+        <div id="logo" style="text-align: center; padding: 10px 0px 3px 0px; width: 100%; height: 30px; background-color: black; color: white; font-size: 1.2em;">SO ChatX
+        </div>
+        
+        <div id="contact_list" style="overflow-y: auto; overflow-x: hidden; height: 80%;"></div>
+        
+        <div id="contact_tabs">
+            <center>
+                <span id="chat_button" style="height: 100%; background-color: white" onclick="use_contact_type = 'chat'; get_contact_data(); this.style.backgroundColor = 'white'; group_button.style.backgroundColor = '';" class="contact_view_button">"!"<br>Chats</span>
+                <span id="group_button" onclick="use_contact_type = 'group'; get_contact_data(); this.style.backgroundColor = 'white'; chat_button.style.backgroundColor = '';" class="contact_view_button">@<br>Groups</span>
+                <span id="add_new_chat" class="contact_view_button">+<br>Add</span>
+                <span id="option_button" onclick="modal_window('Options', `<center><br><br>TOTP Authenticator<br><button style='margin-top: 8px;' onclick='totp_setup();'>Setup</button><br><br><br><br>Active Session<br><button style='margin-top: 8px;' onclick='logout();'>Logout</button><br><br></center>`)" class="contact_view_button"><b>···</b><br>Options</span>
+            </center>        
+        </div>
+    
     </div>
     
-    <div id="contact_list" style="overflow-y: auto; overflow-x: hidden; height: 80%"></div>
     
-    <div id="contact_tabs" style='padding: 1px; position: fixed; width: 100%; color: black; background-color: #e8e8e8;'>
-    <center>
-        <span id="chat_button" style="height: 100%; background-color: white" onclick="use_contact_type = 'chat'; get_contact_data(); this.style.backgroundColor = 'white'; group_button.style.backgroundColor = '';" class="contact_view_button">&#128488<br>Chats</span>
-        <span id="group_button" onclick="use_contact_type = 'group'; get_contact_data(); this.style.backgroundColor = 'white'; chat_button.style.backgroundColor = '';" class="contact_view_button">&#128172<br>Groups</span>
-        <span id="add_new_chat" class="contact_view_button">+<br>Add</span>
-        <span onclick="modal_window('Options', `Not available yet!<br><br><li>block</li><li>delete</li><li>sort</li><li>group</li><br><br><button style='margin-left: 1px;' onclick='logout();'>Logout</button><br><br>`)" class="contact_view_button">&#8801;<br>Menu</span>
-    </center>
+    
+    <div id="chat_view" style="position: absolute; display: none; width: 100%; height: 100%; max-width: 700px; top: 0px;" class="no_text_select">
+    
+        <div id="chat_title"></div><div id="back_button" onclick="contact_view.style.display = 'block'; chat_view.style.display = 'none'; message_box.value = ''">x</div>
+        
+        <div id="history_box" style="overflow-y: scroll;"></div>
+    
+        <textarea id="message_box"></textarea>
+        <div id="send_button"><br><br>Send</div>
+
     </div>
-
-</div>
-
-
-
-<div id="chat_view" style="display: none">
-
-    <div id="chat_title"></div><div id="back_button" onclick="contact_view.style.display = 'block'; chat_view.style.display = 'none'; message_box.value = ''">x</div>
-    
-    <div id="history_box" style="overflow-y: scroll"></div>
-
-    <textarea id="message_box"></textarea>
-    <div id="send_button"><br><br>Send</div>
 
 </div>
 
@@ -139,13 +149,13 @@ document.getElementById('add_new_chat').onclick = function() {
         <div style='overflow-y: hidden;'>
             <center>
                 <b>User Chat Request</b><br>
-                <input type="text" id="request_chat_with" size=18 style='border: 1px solid grey; margin-top: 8px; border-radius: 5px;' placeholder='case-sensitive names'><br><br>
+                <input type="text" id="request_chat_with" size=18 style='border: 1px solid grey; margin-top: 8px;' placeholder='case-sensitive'><br><br>
                 <button id="request_chat_with_button">Request</button>
                 <br><br><br>
                 
                 
                 <b>Group</b><br>
-                <input type="text" id="group_name_input" size=18 style='border: 1px solid grey; margin-top: 8px; border-radius: 5px;' placeholder='case-sensitive names'><br><br>
+                <input type="text" id="group_name_input" size=18 style='border: 1px solid grey; margin-top: 8px;' placeholder='case-sensitive'><br><br>
                 <button onclick='if (group_name_input.value !== "") create_group(group_name_input.value);'>Create</button>
                 <button onclick='if (group_name_input.value !== "") join_group(group_name_input.value);' style='margin-left: 30px;'>Join</button>
                 <br><br>
@@ -169,7 +179,7 @@ document.getElementById('add_new_chat').onclick = function() {
 
 window.addEventListener('resize', () => {
 
-    history_box.style.height = send_button.getBoundingClientRect().y - 50;
+    history_box.style.height = window.innerHeight - 30 - 100 - 20;  // minus heading, contact_tabs, adjustment
 });
 
 
@@ -178,20 +188,27 @@ window.addEventListener('resize', () => {
 
 // LOGIN HANDLINGS
 
-function login_modal() {
+function login_modal(force_show) {
     
-    if (modal_window_box.style.display === '' || modal_window_box.style.display === 'none') {
+    if (modal_window_box.style.display === '' || modal_window_box.style.display === 'none' || force_show === true) {
 
         modal_window('Sign In', `
         
+            <center>
             <div style='overflow: hidden'>
-            <input style='border: 1px solid grey;' type="text" id="_user_name" placeholder="user name">
+            User Name<br>
+            <input style='border: 1px solid grey; margin-top: 8px;' type="text" id="_user_name" placeholder="case-sensitive">
             <br><br>
-            <input style='border: 1px solid grey;' type="password" id="_user_password" placeholder="password">
+            Password<br>
+            <input style='border: 1px solid grey; margin-top: 8px;' type="password" id="_user_password" placeholder="">
             <br><br>
+            
+            <input id="_totp_code" style='border: 1px solid grey; margin-top: 8px;' type="text" placeholder="TOTP code" size=8>
+            <br><br><br>
             <button style='margin-left: 1px;' onclick="pre_login();">Login</button>
             <br><br>
             </div>
+            </center>
         `);
     }
 }
@@ -216,7 +233,7 @@ async function get_key_by_pbkdf2(password, salt) {
 	return new Uint8Array(derived_key_bits).toString();
 }
 
-async function pre_login() { // get the password salt for the given user (*** this is for client-side hashing for added security on top of the server side hashing))
+async function pre_login() { // get the password salt for the given user (*** this is for client-side hashing for added security on top of the server side hashing)
 
     var http_post = new XMLHttpRequest();
 
@@ -230,13 +247,16 @@ async function pre_login() { // get the password salt for the given user (*** th
  
     		var response = JSON.parse(this.responseText);
 
-    		if (response.success) {
+            if (response.timeout) {
+            
+                modal_window('Login Timeout', 'Please wait for 5 seconds before retry.');
+                return;
+            }
 
-                var user_password_salt = response.password_salt;
-                var derived_password = await get_key_by_pbkdf2(_user_password.value, user_password_salt);
+            var user_password_salt = response.password_salt;
+            var derived_password = await get_key_by_pbkdf2(_user_password.value, user_password_salt);
                 
-                login(derived_password);
-    		}
+            login(derived_password);
     	}
     }
     
@@ -265,16 +285,46 @@ function login(derived_password) {  // log in when no existing user already logg
                 
                 _user_name.value = '';
                 _user_password.value = '';
+                _totp_code.vlaue = '';
                 
                 modal_window_close();
                 location.reload();  // *** force page reload
     		}
+
+            else {
+                
+                modal_window('Login Failed', 'Credentials are incorrect.<br><br><button style="margin-left: 1px;" onclick="login_modal(true);">Retry</button>');
+            }
     	}
     }
     
     http_post.open("POST", '/app/so_login/so_login.php');
     http_post.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    http_post.send("user=" + encodeURIComponent(_user_name.value) + "&password=" + encodeURIComponent(derived_password) );
+    http_post.send("user=" + encodeURIComponent(_user_name.value) + "&password=" + encodeURIComponent(derived_password) + "&totp_code=" + encodeURIComponent(_totp_code.value));
+}
+
+function totp_setup() {
+
+    
+    modal_window('TOTP Setup', `
+    
+        <center>
+        <br>
+        User Name<br><input id='totp_user_name' style='margin-top: 8px;' type="text" placeholder='case-sensitive'>
+        <br><br><br>
+        Approval Code<br><input id='totp_approval_code' style='margin-top: 8px;' type="text" size=10>
+        <br><br><br>
+        <button style='margin-left: 1px;' onclick='totp_request_qrcode(totp_user_name, totp_approval_code);'>Submit</button>
+        </center>
+    `);
+}
+
+function totp_request_qrcode(for_user_name, approval_code) {
+
+    server_post_request('/app/so_login/totp_setup.php', 'user_name=' + encodeURIComponent(for_user_name.value) + '&approval_code=' + encodeURIComponent(approval_code.value), function(result) {
+     
+        modal_window('TOTP Setup', result);
+    });
 }
 
 function logout() { // logout the user that matches the session ID in the MYSQL database
@@ -478,7 +528,7 @@ function get_contact_data(type) {   // contacts with their related last message
                 
                     <div class="contact" onclick="modal_window('Pending Request', 'Waiting for ${chat_with} to accept chatting with you!')">
                     <div class="user">${chat_with}</div><br><br>
-                    <div class="last_message"><span style='background-color: #aaffaa; padding: 1vw'>requested to chat with ${chat_with}</span></div>
+                    <div class="last_message"><span style='background-color: #aaffaa; padding: 5px;'>requested to chat with ${chat_with}</span></div>
                     </div>
                 `;
                 
@@ -548,7 +598,8 @@ function get_contact_data(type) {   // contacts with their related last message
 
 function get_chat_data(chat_with) {
 
-    history_box.style.height = send_button.getBoundingClientRect().y - 50;
+	history_box.style.height = window.innerHeight - 30 - 100 - 20;  // minus heading, contact_tabs, adjustment
+
     
 
     currently_interacting_with_user = chat_with;
@@ -571,7 +622,7 @@ function get_chat_data(chat_with) {
 
             history_box.innerHTML += `
             
-                <div style='box-shadow: 0px 0px 1px #909090; border-radius: 5px; background-color: #fafafa; float: left; width: 80%; margin-bottom: 1em; padding: 1em'>
+                <div style='box-shadow: 0px 0px 1px #909090; border-radius: 5px; background-color: #fafafa; float: left; width: 80%; max-width: 700px; margin-bottom: 25px; padding: 15px; margin: 10px;'>
                     <div style='float: left; font-size: 1em; color: grey'>${message.User}</div>
                     <div style='float: right; font-size: 0.8em; color: grey'>${new Date(message.Time + 'Z').toLocaleString()}</div><br><br>
                     <div>${message.Message}</div>
@@ -583,7 +634,7 @@ function get_chat_data(chat_with) {
 
             history_box.innerHTML += `
             
-                <div style='box-shadow: 0px 0px 1px #909090; border-radius: 5px; background-color: #ddffdd; float: right; width: 80%; margin-bottom: 1em; padding: 1em'>
+                <div style='box-shadow: 0px 0px 1px #909090; border-radius: 5px; background-color: #ddffdd; float: right; width: 80%; max-width: 700px; margin-bottom: 25px; padding: 15px; margin: 10px;'>
                     <div style='float: left; font-size: 1em; color: grey'>${message.User}</div>
                     <div style='float: right; font-size: 0.8em; color: grey'>${new Date(message.Time + 'Z').toLocaleString()}</div><br><br>
                     <div>${message.Message}</div>
