@@ -1,7 +1,7 @@
 # Secure Real-Time Web Chat System
 **Technologies:** PHP, JavaScript, HTML, CSS, Server-Sent Events (SSE), MySQL
 
-A fully-featured real-time chat system built from scratch in vanilla PHP and JS, designed with security, efficiency, and portability in mind. The system demonstrates advanced features that typical frameworks don’t provide by default.
+A fully-featured real-time chat system built from scratch in vanilla PHP and JS, designed with security, efficiency, and portability in mind. The system demonstrates advanced features that typical frameworks don’t provide by default.  Ideal for **privacy-focused self-hosted deployments** with minimal setup and hosting requirements.
 
 **Only the client-side code is provided for security purposes. This version of the client-side code represents the minimal setup only.**
 
@@ -9,7 +9,7 @@ A fully-featured real-time chat system built from scratch in vanilla PHP and JS,
 
 1. **Secure Web Login System**
    - Robust session management with PHP sessions, protecting against session hijacking.
-   - Password security: hashed both client-side and server-side.
+   - Password security: zero-knowledge on the server, with client-side enhancement.
    - SQL protection: uses prepared statements / parameterized queries to prevent SQL injection.
    - Per-user authentication with session state maintained across requests.
    - **Mandatory Multi-Factor Authentication (MFA) with TOTP**: all users are required to use TOTP for login, with admin-approved enrollment and compatibility with standard authenticator apps.
