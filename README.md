@@ -32,6 +32,7 @@ A fully-featured real-time chat system built from scratch in vanilla PHP and JS,
    - Differential updates ensure bandwidth-efficient communication.
 
 5. **Scalability & Efficiency**
+   - SSE PHP workers use 5-second sleep intervals to reduce CPU usage while maintaining real-time updates.
    - Designed to work efficiently without heavy frameworks or WebSocket servers.
 
 ## Why This Project Stands Out
